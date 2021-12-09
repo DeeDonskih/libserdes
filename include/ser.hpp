@@ -11,6 +11,9 @@
 namespace serdes
 {
 
+template<class... TPack>
+ByteArray& serialize_tuple(ByteArray& output, const std::tuple<TPack...>& tuple);
+
 template<typename T>
 ByteArray& _serialize();
 
@@ -80,6 +83,20 @@ ByteArray& _serialize(ByteArray& output, const T& value)
     return output;
 }
 
+template<typename T, typename std::enable_if<is_tuple<T>::value, bool>::type = true>
+ByteArray& _serialize(ByteArray& output, const T& value)
+{
+  return serialize_tuple(output,value);
+}
+
+template<typename T, typename std::enable_if<is_tuple<T>::value, bool>::type = true>
+ByteArray _serialize(const T& value)
+{
+  ByteArray retval{};
+  serialize_tuple(retval,value);
+  return retval;
+}
+
 template<typename T>
 ByteArray& serialize(ByteArray& output, T& value)
 {
@@ -113,8 +130,7 @@ ByteArray& serialize(ByteArray& output, TPack&&... value)
     return output;
 }
 
-template<class... TPack>
-ByteArray& serialize_tuple(ByteArray& output, const std::tuple<TPack...>& tuple);
+
 
 namespace
 {
@@ -145,6 +161,8 @@ ByteArray& serialize_tuple(ByteArray& output, const std::tuple<TPack...>& tuple)
     _serialize_each_<sizeof...(TPack), TPack...>::_tupleSerialize_(output, tuple);
     return output;
 }
+
+
 
 }   // namespace serdes
 
