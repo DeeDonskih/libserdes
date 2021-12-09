@@ -35,7 +35,8 @@ int main(int argc, char *argv[])
     std::string cstr = "std::move(i_vec)"s;
 
     using test_tuple = std::tuple<int,float,std::string>;
-    test_tuple tuple_ser = std::make_tuple(1,2.0,"311"s);
+    test_tuple tuple_ser = std::make_tuple(1,2.0,"34"s);
+    std::cout << std::endl << "size of std::make_tuple(1,2.0,s): " << serdes::argumentSize(tuple_ser) << std::endl;
 
     serdes::ByteArray ser_pack{};
     size_t off=0;
