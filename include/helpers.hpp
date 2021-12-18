@@ -19,12 +19,11 @@ size_t argumentSize(const ArgT&)
 template<typename ArgT, typename std::enable_if<is_contiguous_container<ArgT>::value, bool>::type = true>
 size_t argumentSize(const ArgT& arg)
 {
-    return arg.size();
+  return (arg.size()*sizeof(typename ArgT::value_type))+sizeof(ArraySize);
 }
 
 template<typename... TPack>
 size_t argumentSize(const std::tuple<TPack...>& arg);
-
 
 
 namespace {
