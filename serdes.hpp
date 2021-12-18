@@ -3,5 +3,6 @@
 
 #include "include/ser.hpp"
 #include "include/deser.hpp"
+#include "include/helpers.hpp"
 
 #endif // SERDES_HPP

@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-#define EXTEND_TRAITS_DEFINE_HAS_TYPE(MemType)                                             \
+#define EXTEND_TRAITS_DEFINE_HAS_TYPE(MemType)                                      \
     template<typename, typename = std::void_t<>>                                    \
     struct HasTypeT_##MemType : std::false_type                                     \
     {                                                                               \
@@ -29,7 +29,7 @@
     {                                                                               \
     }   // ; intentionally skipped
 
-#define EXTEND_TRAITS_DEFINE_HAS_MEMBER(Member)                                              \
+#define EXTEND_TRAITS_DEFINE_HAS_MEMBER(Member)                                       \
     template<typename, typename = std::void_t<>>                                      \
     struct HasMemberT_##Member : std::false_type                                      \
     {                                                                                 \
