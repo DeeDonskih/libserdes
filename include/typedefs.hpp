@@ -12,6 +12,7 @@ namespace serdes
 
 using ByteArray       = std::vector<uint8_t>;
 using SharedByteArray = std::shared_ptr<ByteArray>;
+using ArraySize       = uint32_t;
 
 }   // namespace serdes
 
