@@ -35,7 +35,7 @@ T _deserialize_contiguous(ByteArray& in, _Offset& offset)
         return retval;
     } else if constexpr (is_contiguous_container<_RetValueType>::value) {
         T retval;
-        for (size_t i=0; i < _retsize; ++i) {
+        while (_retsize--) {
             retval.emplace_back(_deserialize_contiguous<_RetValueType>(in, offset));
         }
         return retval;
