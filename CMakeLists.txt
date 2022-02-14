@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.18)
 
 project(libserdes LANGUAGES CXX)
 
@@ -7,7 +7,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(SERDES_BUILD_TESTS "Build libserdes tests" ON)
+option(SERDES_BUILD_TESTS "Build libserdes tests" OFF)
 
 set(SERDES_LIB_DIR include)
 set(SERDES_TESTS_DIR tests)
@@ -42,4 +42,4 @@ endif()
 
 add_library(serdes INTERFACE)
 target_sources(serdes INTERFACE serdes.hpp)
-target_sources(serdes PRIVATE ${SERDES_LIB_SRC})
+target_sources(serdes INTERFACE ${SERDES_LIB_SRC})

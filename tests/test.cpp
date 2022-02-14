@@ -37,6 +37,11 @@ vector<int> vec_i{1,2,3,4,5};
 vector<float> vec_f{1,2,3,4,5};
 vector<double> vec_d{1,2,3,4,5};
 
+vector<uint8_t> raw1{1,2,3,4,5};
+vector<uint8_t> raw2{6,7,8,9};
+vector<uint8_t> raw3{10,11};
+vector<vector<uint8_t>> vecvec{raw1,raw2,raw3};
+
 
 using array100int = array<int,100>;
 using map_test = map<std::string,int>;
@@ -118,6 +123,31 @@ TEST(SerializerTests,SizeOfSer)
     size_t realsize_temp = sizeof (i)+sizeof (f)+sizeof(d)+str_gt.size()+sizeof(uint32_t);
     auto serie = serialize(t_tuple);
     EXPECT_EQ(serie.size(),realsize_temp);
+}
+
+TEST(SerializerTests,SizeOfVecVec)
+{
+    size_t realsize = raw1.size()+raw2.size()+raw3.size()+sizeof(uint32_t)*3+sizeof(uint32_t);
+    auto serialized = serialize(vecvec);
+    EXPECT_EQ(serialized.size(),realsize);
+}
+
+TEST(DeserializerTests,DeserVector)
+{
+    using ret_type = decltype(raw1);
+    size_t os=0;
+    auto seialized = serialize<ret_type>(raw1);
+    auto deserialized = deserialize<ret_type>(seialized,os);
+    EXPECT_EQ(raw1,deserialized);
+}
+
+TEST(DeserializerTests,DeserVecVec)
+{
+    using ret_type = decltype(vecvec);
+    size_t os=0;
+    auto seialized = serialize<ret_type>(vecvec);
+    auto deserialized = deserialize<ret_type>(seialized,os);
+    EXPECT_EQ(vecvec,deserialized);
 }
 /*
 int main(int argc, char *argv[])
