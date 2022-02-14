@@ -229,7 +229,7 @@ void print_traits()
 }
 
 template<typename T>
-void print_traits(T val)
+void print_traits([[maybe_unused]]T val)
 {print_traits<T>();}
 
 }   // namespace serdes
