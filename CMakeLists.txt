@@ -7,11 +7,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(SERDES_BUILD_TESTS "Build libserdes tests" OFF)
+option(SERDES_BUILD_TESTS "Build libserdes tests" ON)
 
 set(SERDES_LIB_DIR include)
 set(SERDES_TESTS_DIR tests)
-
 
 file(GLOB_RECURSE SERDES_LIB_SRC RELATIVE ${PROJECT_SOURCE_DIR} "${SERDES_LIB_DIR}/*.cc" "${SERDES_LIB_DIR}/*.h" "${SERDES_LIB_DIR}/*.?pp")
 
@@ -30,6 +29,8 @@ if(SERDES_BUILD_TESTS)
     enable_testing()
     add_executable(test_serdes
                    tests/test.cpp
+                   tests/test_class.cpp
+                   tests/test_class.hpp
                    serdes.hpp
                    ${SERDES_LIB_SRC}
                    )

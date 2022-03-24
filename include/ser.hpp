@@ -1,8 +1,8 @@
 #ifndef SER_HPP
 #define SER_HPP
 
-#include <type_traits>
 #include <tuple>
+#include <type_traits>
 
 #include "extend_traits.hpp"
 #include "typedefs.hpp"
@@ -32,11 +32,11 @@ ByteArray _serialize(const T& value)
     _Iterator _begin = (_Iterator)value.data();
     _Iterator _end   = _begin + (sizeof(_Element) * value.size());
     ByteArray retval = _serialize<uint32_t>(value.size());
-    for (auto& x:value) {
-        auto serialized_element= _serialize(x);
+    for (auto& x : value) {
+        auto serialized_element = _serialize(x);
         std::copy(serialized_element.begin(), serialized_element.end(), std::back_inserter(retval));
     }
-//    std::copy(_begin, _end, std::back_inserter(retval));
+    //    std::copy(_begin, _end, std::back_inserter(retval));
     return retval;
 }
 
@@ -78,6 +78,20 @@ ByteArray _serialize(const T& value)
     ByteArray retval{};
     serialize_tuple(retval, value);
     return retval;
+}
+
+template<typename T, typename std::enable_if<is_serializable_object<T>::value, bool>::type = true>
+ByteArray _serialize(const T& value)
+{
+    return value.Serialize();
+}
+
+template<typename T, typename std::enable_if<is_serializable_object<T>::value, bool>::type = true>
+ByteArray& _serialize(ByteArray& output, const T& value)
+{
+    ByteArray temp = value.Serialize();
+    std::copy(temp.begin(), temp.end(), std::back_inserter(output));
+    return output;
 }
 
 template<typename T>
