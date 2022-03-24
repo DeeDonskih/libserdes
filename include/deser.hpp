@@ -26,16 +26,16 @@ T _deserialize_contiguous(ByteArray& in, _Offset& offset)
 {
     using _RetValueType = typename T::value_type;
     using _RIterator    = typename T::pointer;
-    size_t _retsize = _deserialize_trivial<uint32_t>(in, offset);
+    size_t _retsize     = _deserialize_trivial<uint32_t>(in, offset);
     if constexpr (is_trivial_serializable<_RetValueType>::value) {
         _RIterator _begin = (_RIterator) & in[offset];
-        _RIterator _end = _begin + _retsize;
+        _RIterator _end   = _begin + _retsize;
         T retval(_begin, _end);
         offset += (_retsize * sizeof(_RetValueType));
         return retval;
     } else if constexpr (is_contiguous_container<_RetValueType>::value) {
         T retval;
-        while (_retsize--) {
+        for (size_t i = 0; i < _retsize; ++i) {
             retval.emplace_back(_deserialize_contiguous<_RetValueType>(in, offset));
         }
         return retval;
@@ -69,6 +69,14 @@ T deserialize(ByteArray& in, _Offset& offset)
 {
     T retval;
     deserialize_tuple(retval, in, offset);
+    return retval;
+}
+
+template<typename T, typename std::enable_if<is_serializable_object<T>::value, bool>::type = true>
+T deserialize(ByteArray& in, _Offset& offset)
+{
+    T retval;
+    offset = retval.Deserialize(in, offset);
     return retval;
 }
 
