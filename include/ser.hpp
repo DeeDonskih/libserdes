@@ -36,6 +36,7 @@ ByteArray _serialize(const T& value)
         auto serialized_element= _serialize(x);
         std::copy(serialized_element.begin(), serialized_element.end(), std::back_inserter(retval));
     }
+//    std::copy(_begin, _end, std::back_inserter(retval));
     return retval;
 }
 

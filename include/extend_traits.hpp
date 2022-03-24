@@ -173,6 +173,16 @@ template<typename T>
 struct is_tuple : is_tuple_impl<std::decay_t<T>> {};
 
 
+EXTEND_TRAITS_DEFINE_HAS_MEMBER(Serialize);
+EXTEND_TRAITS_DEFINE_HAS_MEMBER(Deserialize);
+
+template<typename, typename = std::void_t<>>
+struct is_serializable_archetype : std::false_type
+{
+};
+template<typename T>
+struct is_serializable_archetype<T, typename std::enable_if<((HasMemberT_Serialize<T>::value)&&(HasMemberT_Deserialize<T>::value))>::type> : std::true_type {};
+
 template<typename T>
 void print_traits()
 {
