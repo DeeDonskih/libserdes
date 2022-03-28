@@ -12,12 +12,23 @@ namespace serdes {
 using _Iterator = typename ByteArray::pointer;
 using _Offset   = size_t;
 
+    template<class ... TPack>
+    void deserialize_tuple(std::tuple<TPack...>& output, ByteArray& in, _Offset& offset);
+
 template<typename T>
 T _deserialize_trivial(ByteArray& in, _Offset& offset)
 {
     T retval;
     memcpy(&retval, &in[offset], sizeof(T));
     offset += sizeof(T);
+    return retval;
+}
+
+template<typename T>
+T _deserialize_object(ByteArray& in, _Offset& offset)
+{
+    T retval;
+    offset = retval.Deserialize(in, offset);
     return retval;
 }
 
@@ -37,6 +48,19 @@ T _deserialize_contiguous(ByteArray& in, _Offset& offset)
         T retval;
         for (size_t i = 0; i < _retsize; ++i) {
             retval.emplace_back(_deserialize_contiguous<_RetValueType>(in, offset));
+        }
+        return retval;
+    } else if constexpr (is_tuple<_RetValueType>::value) {
+        T retval;
+        for (size_t i = 0; i < _retsize; ++i) {
+            _RetValueType tuple_element;
+            retval.emplace_back(deserialize_tuple(tuple_element,in,offset));
+        }
+        return retval;
+    } else if constexpr(is_serializable_object<_RetValueType>::value) {
+        T retval;
+        for (size_t i = 0; i < _retsize; ++i) {
+            retval.emplace_back(_deserialize_object<_RetValueType>(in,offset));
         }
         return retval;
     }
@@ -61,8 +85,7 @@ std::tuple<T...> deserialize(ByteArray& in, _Offset& offset)
     return std::make_tuple(deserialize<T>(in, offset)...);
 }
 
-template<class ... TPack>
-void deserialize_tuple(std::tuple<TPack...>& output, ByteArray& in, _Offset& offset);
+
 
 template<typename T, typename std::enable_if<is_tuple<T>::value, bool>::type = true>
 T deserialize(ByteArray& in, _Offset& offset)
@@ -75,9 +98,7 @@ T deserialize(ByteArray& in, _Offset& offset)
 template<typename T, typename std::enable_if<is_serializable_object<T>::value, bool>::type = true>
 T deserialize(ByteArray& in, _Offset& offset)
 {
-    T retval;
-    offset = retval.Deserialize(in, offset);
-    return retval;
+    return _deserialize_object<T>(in,offset);
 }
 
 namespace {

@@ -178,3 +178,24 @@ TEST(SerDeser, SerializeClassTest)
     TestClass deserialized_duos = serdes::deserialize<TestClass>(serialized_obj, os);
     EXPECT_EQ(duos, deserialized_duos);
 }
+
+TEST(SerDeser, SerializeNontrivialSets)
+{
+    size_t os=0;
+    std::vector<TestClass> setoftests = {{"Uno",1,Count::FIRST},{"Duos",2,Count::SECOND},{"Tre",3,Count::THIRD}};
+    auto serialized_set = serdes::serialize(setoftests);
+    auto deserialized_set = serdes::deserialize<std::vector<TestClass>>(serialized_set,os);
+
+    cout<<"SOURCE:\n"<<endl;
+    for (auto& x: setoftests)
+    {
+        std::cout<<"{\n"<<x.toString()<<"\n}"<<std::endl;
+    }
+    cout<<"RESULT:\n"<<endl;
+    for (auto& x: deserialized_set)
+    {
+        std::cout<<"{\n"<<x.toString()<<"\n}"<<std::endl;
+    }
+    EXPECT_EQ(setoftests,deserialized_set);
+
+}

@@ -14,6 +14,55 @@ ByteArray& serialize_tuple(ByteArray& output, const std::tuple<TPack...>& tuple)
 template<typename T>
 ByteArray& _serialize();
 
+    template<typename T, typename std::enable_if<is_serializable_object<T>::value, bool>::type = true>
+    ByteArray _serialize(const T& value)
+    {
+        return value.Serialize();
+    }
+
+    template<typename T, typename std::enable_if<is_serializable_object<T>::value, bool>::type = true>
+    ByteArray& _serialize(ByteArray& output, const T& value)
+    {
+        ByteArray temp = value.Serialize();
+        std::copy(temp.begin(), temp.end(), std::back_inserter(output));
+        return output;
+    }
+
+    template<typename T, typename std::enable_if<is_trivial_serializable<T>::value, bool>::type = true>
+    ByteArray& _serialize(ByteArray& output, const T& value)
+    {
+        using _Iterator = typename ByteArray::pointer;   // typename ByteArray::pointer;
+
+        _Iterator _begin = (_Iterator) & value;
+        std::copy(_begin, _begin + sizeof(T), std::back_inserter(output));
+
+        return output;
+    }
+
+    template<typename T, typename std::enable_if<is_contiguous_container<T>::value, bool>::type = true>
+    ByteArray& _serialize(ByteArray& output, const T& value)
+    {
+        using _Element  = typename T::value_type;   // typename T::typename;
+        using _Iterator = typename ByteArray::pointer;
+
+        _Iterator _begin = (_Iterator)value.data();
+        _Iterator _end   = _begin + (sizeof(_Element) * value.size());
+
+        _serialize<uint32_t>(output, value.size());
+        for(auto& x: value)
+        {
+            _serialize<_Element>(output,x);
+        }
+//    std::copy(_begin, _end, std::back_inserter(output));
+        return output;
+    }
+
+    template<typename T, typename std::enable_if<is_tuple<T>::value, bool>::type = true>
+    ByteArray& _serialize(ByteArray& output, const T& value)
+    {
+        return serialize_tuple(output, value);
+    }
+
 template<typename T, typename std::enable_if<is_trivial_serializable<T>::value, bool>::type = true>
 ByteArray _serialize(const T& value)
 {
@@ -33,43 +82,10 @@ ByteArray _serialize(const T& value)
     _Iterator _end   = _begin + (sizeof(_Element) * value.size());
     ByteArray retval = _serialize<uint32_t>(value.size());
     for (auto& x : value) {
-        auto serialized_element = _serialize(x);
-        std::copy(serialized_element.begin(), serialized_element.end(), std::back_inserter(retval));
+        _serialize<_Element>(retval,x);
     }
     //    std::copy(_begin, _end, std::back_inserter(retval));
     return retval;
-}
-
-template<typename T, typename std::enable_if<is_trivial_serializable<T>::value, bool>::type = true>
-ByteArray& _serialize(ByteArray& output, const T& value)
-{
-    using _Iterator = typename ByteArray::pointer;   // typename ByteArray::pointer;
-
-    _Iterator _begin = (_Iterator) & value;
-    std::copy(_begin, _begin + sizeof(T), std::back_inserter(output));
-
-    return output;
-}
-
-template<typename T, typename std::enable_if<is_contiguous_container<T>::value, bool>::type = true>
-ByteArray& _serialize(ByteArray& output, const T& value)
-{
-    using _Element  = typename T::value_type;   // typename T::typename;
-    using _Iterator = typename ByteArray::pointer;
-
-    _Iterator _begin = (_Iterator)value.data();
-    _Iterator _end   = _begin + (sizeof(_Element) * value.size());
-
-    _serialize<uint32_t>(output, value.size());
-    std::copy(_begin, _end, std::back_inserter(output));
-
-    return output;
-}
-
-template<typename T, typename std::enable_if<is_tuple<T>::value, bool>::type = true>
-ByteArray& _serialize(ByteArray& output, const T& value)
-{
-    return serialize_tuple(output, value);
 }
 
 template<typename T, typename std::enable_if<is_tuple<T>::value, bool>::type = true>
@@ -80,19 +96,7 @@ ByteArray _serialize(const T& value)
     return retval;
 }
 
-template<typename T, typename std::enable_if<is_serializable_object<T>::value, bool>::type = true>
-ByteArray _serialize(const T& value)
-{
-    return value.Serialize();
-}
 
-template<typename T, typename std::enable_if<is_serializable_object<T>::value, bool>::type = true>
-ByteArray& _serialize(ByteArray& output, const T& value)
-{
-    ByteArray temp = value.Serialize();
-    std::copy(temp.begin(), temp.end(), std::back_inserter(output));
-    return output;
-}
 
 template<typename T>
 ByteArray& serialize(ByteArray& output, T& value)
