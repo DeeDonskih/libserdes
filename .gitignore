@@ -45,7 +45,7 @@ Thumbs.db
 
 /build
 /data
-
+/cmake-build*
 
 # CMake generated files
 # ----------------------------------------------------------------------------
