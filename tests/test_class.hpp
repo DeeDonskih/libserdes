@@ -1,9 +1,9 @@
 /**
  * @file test_class.hpp
- * @author Dmitry Donskikh (deedonskihdev@gmail.com)
+ * @author Dmitrii Donskikh (deedonskihdev@gmail.com)
  * @brief
  *
- * @copyright Copyright (c) 2018-2022 Dmitriy Donskikh
+ * @copyright Copyright (c) 2018-2022 Dmitrii Donskikh
  *            All rights reserved.
  */
 

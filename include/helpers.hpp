@@ -1,3 +1,11 @@
+/**
+ * @file helpers.hpp
+ * @author Dmitrii Donskikh (deedonskihdev@gmail.com)
+ * @brief helper functions
+ *
+ * @copyright Copyright (c) 2018-2022 Dmitrii Donskikh
+ *            All rights reserved.
+ */
 #ifndef HELPERS_HPP
 #define HELPERS_HPP
 

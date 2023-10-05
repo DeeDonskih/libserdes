@@ -1,3 +1,11 @@
+/**
+ * @file typedefs.hpp
+ * @author Dmitrii Donskikh (deedonskihdev@gmail.com)
+ * @brief type aliases
+ *
+ * @copyright Copyright (c) 2018-2022 Dmitrii Donskikh
+ *            All rights reserved.
+ */
 #ifndef TYPEDEFS_HPP
 #define TYPEDEFS_HPP
 

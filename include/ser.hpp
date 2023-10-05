@@ -1,3 +1,11 @@
+/**
+ * @file ser.hpp
+ * @author Dmitrii Donskikh (deedonskihdev@gmail.com)
+ * @brief generic serialization functions
+ *
+ * @copyright Copyright (c) 2018-2022 Dmitrii Donskikh
+ *            All rights reserved.
+ */
 #ifndef SER_HPP
 #define SER_HPP
 

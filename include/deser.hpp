@@ -1,3 +1,11 @@
+/**
+ * @file deser.hpp
+ * @author Dmitrii Donskikh (deedonskihdev@gmail.com)
+ * @brief Generic deserialization functions
+ *
+ * @copyright Copyright (c) 2018-2022 Dmitrii Donskikh
+ *            All rights reserved.
+ */
 #pragma once
 
 #include <cstddef>

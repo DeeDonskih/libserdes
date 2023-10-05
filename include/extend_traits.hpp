@@ -1,11 +1,11 @@
 /**
  * @file extend_traits.hpp
- * @author Dmitry Donskikh (deedonskihdev@gmail.com)
- * @brief
+ * @author Dmitrii Donskikh (deedonskihdev@gmail.com)
+ * @brief extended type traits
  * @version 1.3
  * @date 2018-03-15
  *
- * @copyright Copyright (c) 2018-2021 Dmitriy Donskikh
+ * @copyright Copyright (c) 2018-2021 Dmitrii Donskikh
  *            All rights reserved.
  */
 
